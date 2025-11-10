@@ -1,0 +1,56 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "code-review-agent",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-11-04",
+	"compatibility_flags": [
+		"global_fetch_strictly_public",
+		"nodejs_compat"
+	],
+	"assets": {
+		// The path to the directory containing the `index.html` file to be served at `/`
+		"directory": "./public"
+	},
+	"observability": {
+		"enabled": true
+	},
+	/**
+	 * AI Binding for Workers AI
+	 * https://developers.cloudflare.com/workers-ai/
+	 */
+	"ai": {
+		"binding": "AI",
+		"remote": true
+	},
+	/**
+	 * Durable Objects for stateful agents
+	 * https://developers.cloudflare.com/durable-objects/
+	 */
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "CODE_REVIEW_AGENT",
+				"class_name": "CodeReviewAgent"
+			}
+		]
+	},
+	/**
+	 * Migrations for Durable Objects
+	 */
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["CodeReviewAgent"]
+		}
+	],
+	/**
+	 * Environment Variables
+	 */
+	"vars": {
+		"ENVIRONMENT": "development"
+	}
+}
